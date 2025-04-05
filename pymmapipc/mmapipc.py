@@ -85,7 +85,6 @@ class MmapIPC():
         if (not os.path.exists(mmap_file)):
             self.__init_mmap_file(mmap_file, buff_size)
 
-        self.fd = None
         self.mmap = self.__mmap(mmap_file)
 
         header = self.__read_mmap_header()
@@ -94,7 +93,7 @@ class MmapIPC():
 
         elif (header[HeaderIndices.Magic] not in [MAGIC_NUMBER, 0x00000000]):
             raise BufferError(
-                f"Error magic number: {bytes.fromhex(hex(header[HeaderIndices.Magic])[2:])[::-1]}"
+                f"Error magic number: {str(bytes.fromhex(hex(header[HeaderIndices.Magic])[2:])[::-1])}"
             )
 
         self.assign_op = 0
@@ -201,7 +200,7 @@ class MmapIPC():
             *header
         ))
 
-    def __calc_buff_available_size(self, in_offset: int, out_offset: int, buff_size: int) -> Tuple[int]:
+    def __calc_buff_available_size(self, in_offset: int, out_offset: int, buff_size: int) -> Tuple[int, int]:
         if in_offset >= out_offset:
             return (buff_size - in_offset, out_offset)
 
