@@ -23,7 +23,7 @@ def test_initialize(temp_file):
     # Verfy mmap header correct
     with open(temp_file, 'rb') as f:
         raw_header = f.read(StructSizes.Header)
-        magic, version, ptr_a, ptr_b, sign = struct.unpack(StructFormats.Header, raw_header)
+        magic, version, ptr_a, ptr_b, sign = struct.unpack(StructFormats.Header.value, raw_header)
         assert magic == MAGIC_NUMBER
         assert version == 1
         assert sign & (SignBits.OPA | SignBits.OPB) != 0
@@ -34,13 +34,13 @@ def test_OP_assign(temp_file):
     oa = MmapIPC(temp_file)         # noqa: F841
     with open(temp_file, 'rb') as f:
         raw_header = f.read(StructSizes.Header)
-        sign = struct.unpack(StructFormats.Header, raw_header)[HeaderIndices.Sign]
+        sign = struct.unpack(StructFormats.Header.value, raw_header)[HeaderIndices.Sign]
         assert sign & (SignBits.OPA | SignBits.OPB) == SignBits.OPA
 
     ob = MmapIPC(temp_file)         # noqa: F841
     with open(temp_file, 'rb') as f:
         raw_header = f.read(StructSizes.Header)
-        sign = struct.unpack(StructFormats.Header, raw_header)[HeaderIndices.Sign]
+        sign = struct.unpack(StructFormats.Header.value, raw_header)[HeaderIndices.Sign]
         assert sign & (SignBits.OPA | SignBits.OPB) == (SignBits.OPA | SignBits.OPB)
 
     with pytest.raises(BufferError) as e:
@@ -53,14 +53,14 @@ def test_reset_behavior(temp_file):
     oa = MmapIPC(temp_file)
     with open(temp_file, 'rb') as f:
         raw_header = f.read(StructSizes.Header)
-        sign = struct.unpack(StructFormats.Header, raw_header)[HeaderIndices.Sign]
+        sign = struct.unpack(StructFormats.Header.value, raw_header)[HeaderIndices.Sign]
         assert sign & (SignBits.OPA | SignBits.OPB) == SignBits.OPA
 
     del oa
 
     with open(temp_file, 'rb') as f:
         raw_header = f.read(StructSizes.Header)
-        sign = struct.unpack(StructFormats.Header, raw_header)[HeaderIndices.Sign]
+        sign = struct.unpack(StructFormats.Header.value, raw_header)[HeaderIndices.Sign]
         assert sign & (SignBits.OPA | SignBits.OPB) == 0
 
 
