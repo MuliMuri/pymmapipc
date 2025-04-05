@@ -39,11 +39,11 @@ import struct
 import os
 import time
 
-from enum import IntEnum, StrEnum
+from enum import IntEnum, Enum
 from typing import Optional, Tuple, Sequence
 
 
-class StructFormats(StrEnum):
+class StructFormats(Enum):
     Header = "<IIIII"
     Buffer = "<III"
 
