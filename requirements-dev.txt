@@ -1,0 +1,4 @@
+# for test
+flake8
+mypy
+coverage
