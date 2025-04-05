@@ -49,8 +49,8 @@ class StructFormats(Enum):
 
 
 class StructSizes(IntEnum):
-    Header = struct.calcsize(StructFormats.Header)
-    Buffer = struct.calcsize(StructFormats.Buffer)
+    Header = struct.calcsize(StructFormats.Header.value)
+    Buffer = struct.calcsize(StructFormats.Buffer.value)
 
 
 class HeaderIndices(IntEnum):
@@ -151,7 +151,7 @@ class MmapIPC():
             # OPA
             header[HeaderIndices.Sign] = sign | SignBits.OPA
             self.mmap.write(struct.pack(
-                StructFormats.Header,
+                StructFormats.Header.value,
                 *header
             ))
 
@@ -161,7 +161,7 @@ class MmapIPC():
             # OPB
             header[HeaderIndices.Sign] = sign | SignBits.OPB
             self.mmap.write(struct.pack(
-                StructFormats.Header,
+                StructFormats.Header.value,
                 *header
             ))
 
@@ -172,12 +172,12 @@ class MmapIPC():
     def __read_buff_header(self, buff_ptr: int) -> Tuple:
         self.mmap.seek(buff_ptr)
         raw_buff_header = self.mmap.read(StructSizes.Buffer)
-        return struct.unpack(StructFormats.Buffer, raw_buff_header)
+        return struct.unpack(StructFormats.Buffer.value, raw_buff_header)
 
     def __write_buff_header(self, buff_base_ptr: int, header: Sequence) -> None:
         self.mmap.seek(buff_base_ptr)
         self.mmap.write(struct.pack(
-            StructFormats.Buffer,
+            StructFormats.Buffer.value,
             *header
         ))
 
@@ -191,12 +191,12 @@ class MmapIPC():
     def __read_mmap_header(self) -> Tuple:
         self.mmap.seek(0)
         raw_mmap_header = self.mmap.read(StructSizes.Header)
-        return struct.unpack(StructFormats.Header, raw_mmap_header)
+        return struct.unpack(StructFormats.Header.value, raw_mmap_header)
 
     def __write_mmap_header(self, header: Sequence) -> None:
         self.mmap.seek(0)
         self.mmap.write(struct.pack(
-            StructFormats.Header,
+            StructFormats.Header.value,
             *header
         ))
 
